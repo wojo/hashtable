@@ -158,10 +158,21 @@ hashtable_count(struct hashtable *h);
  * @name        hashtable_destroy
  * @param   h   the hashtable
  * @param       free_values     whether to call 'free' on the remaining values
+ * @param       free_keys       whether to call 'free' on the remaining keys
  */
 
 void
-hashtable_destroy(struct hashtable *h, int free_values);
+hashtable_destroy(struct hashtable *h, int free_values, int free_keys);
+
+/*****************************************************************************
+ * default string hash based off djb2's version, see
+ * http://www.cse.yorku.ca/~oz/hash.html
+ *
+ * @name        string_hash
+ * @param   str string to hash
+ */
+unsigned long           
+string_hash(char *str);
 
 #endif /* __HASHTABLE_CWC22_H__ */
 

@@ -157,7 +157,7 @@ main(int argc, char **argv)
 /*****************************************************************************/
 /* Hashtable destroy and create */
 
-    hashtable_destroy(h, 1);
+    hashtable_destroy(h, 1, 1);
     h = NULL;
     free(k);
 
@@ -231,7 +231,7 @@ main(int argc, char **argv)
 /*****************************************************************************/
 /* Hashtable destroy */
 
-    hashtable_destroy(h, 1);
+    hashtable_destroy(h, 1, 1);
     free(k);
     return 0;
 }

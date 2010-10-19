@@ -213,31 +213,44 @@ hashtable_remove(struct hashtable *h, void *k)
 /*****************************************************************************/
 /* destroy */
 void
-hashtable_destroy(struct hashtable *h, int free_values)
+hashtable_destroy(struct hashtable *h, int free_values, int free_keys)
 {
     unsigned int i;
     struct entry *e, *f;
     struct entry **table = h->table;
-    if (free_values)
+    for (i = 0; i < h->tablelength; i++)
     {
-        for (i = 0; i < h->tablelength; i++)
-        {
-            e = table[i];
-            while (NULL != e)
-            { f = e; e = e->next; freekey(f->k); free(f->v); free(f); }
-        }
-    }
-    else
-    {
-        for (i = 0; i < h->tablelength; i++)
-        {
-            e = table[i];
-            while (NULL != e)
-            { f = e; e = e->next; freekey(f->k); free(f); }
-        }
+	e = table[i];
+	while (NULL != e)
+	{ 
+		f = e; 
+		e = e->next; 
+		if (free_keys) 
+		{ 
+			freekey(f->k); 
+		}
+		if (free_values && f->k != f->v) 
+		{ 
+			free(f->v); 
+		}
+		free(f); }
     }
     free(h->table);
     free(h);
+}
+
+/*****************************************************************************/
+/* default string hash based off djb2, see http://www.cse.yorku.ca/~oz/hash.html */
+unsigned long
+string_hash(char *str)
+{
+        unsigned long hash = 5381;
+        int c;
+
+        while ((c = *str++) != 0)
+            hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+        return hash;
 }
 
 /*
